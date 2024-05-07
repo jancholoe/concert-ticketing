@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 19, 2023 at 02:57 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: May 07, 2024 at 09:17 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -66,9 +66,9 @@ CREATE TABLE `concert_details` (
 --
 
 INSERT INTO `concert_details` (`concert_ID`, `concert_name`, `schedule`, `time`, `description`, `poster`) VALUES
-(1, 'Bruno Mars', '2024-01-30', '17:37:00', 'Peter Gene Hernandez, known professionally as Bruno Mars, is an American singer-songwriter and record producer. He is known for his stage performances, retro showmanship, and for performing in a wide range of musical styles, including pop, R&B, funk, soul, reggae, disco, and rock.', 'bruno.jpg'),
+(1, 'Bruno Mars', '2025-11-13', '17:37:00', 'Peter Gene Hernandez, known professionally as Bruno Mars, is an American singer-songwriter and record producer. He is known for his stage performances, retro showmanship, and for performing in a wide range of musical styles, including pop, R&B, funk, soul, reggae, disco, and rock.', 'bruno.jpg'),
 (2, 'Taylor Swift', '2024-11-30', '21:38:00', 'Taylor Alison Swift is an American singer-songwriter. Recognized for her songwriting, musical versatility, artistic reinventions, and influence on the music industry, she is a prominent cultural figure of the 21st century.', 'taylor.jpg'),
-(4, '5 Seconds of Summer', '2024-11-30', '19:39:00', '	5 Seconds of Summer, often shortened to 5SOS, are an Australian pop rock band from Sydney, New South Wales, formed in late 2011. The group consists of lead vocalist and rhythm guitarist Luke Hemmings, lead guitarist Michael Clifford, bassist Calum Hood, and drummer Ashton Irwin.d', '5Ssos.jpg'),
+(4, '5 Seconds of Summer', '2025-04-30', '19:39:00', '	5 Seconds of Summer, often shortened to 5SOS, are an Australian pop rock band from Sydney, New South Wales, formed in late 2011. The group consists of lead vocalist and rhythm guitarist Luke Hemmings, lead guitarist Michael Clifford, bassist Calum Hood, and drummer Ashton Irwin.d', '5Ssos.jpg'),
 (9, 'The Weeknd', '2024-06-11', '17:00:00', 'Abel Makkonen Tesfaye, known professionally as the Weeknd, is a Canadian singer, songwriter, and record producer. He is noted for his unconventional music production, artistic reinventions, and his signature use of the falsetto register.', 'the-weeknd.jpg'),
 (10, 'Niall Horan', '2024-05-14', '17:25:00', 'Niall James Horan is an Irish singer-songwriter. He rose to prominence as a member of the boy band One Direction, formed in 2010 on the singing competition The X Factor.', 'portrait_15102023163147.jpg'),
 (11, 'Rivermaya', '2024-07-11', '18:10:00', 'Rivermaya is a Filipino alternative rock band. Formed in 1994, it is one of the several bands who spearheaded the 1990s Philippine alternative rock explosion.', 'portrait_16112023132230.jpg');
@@ -136,7 +136,46 @@ INSERT INTO `customer` (`customer_ID`, `concert_ID`, `payment_date`, `customer_n
 (12, 2, '2023-12-10', 'Krishan Aea Dela Cruz', 'delacruzkrishanaea@gmail.com', '6683515833'),
 (13, 4, '2023-12-10', 'Yuno baellery', 'llorenkevs@gmail.com', '4240638944'),
 (14, 9, '2023-12-11', 'Kevin Carl Lloren', 'llorenkevincarl@gmail.com', '2185395365'),
-(15, 9, '2023-12-11', 'Kevin Carl Lloren', 'llorenkevincarl@gmail.com', '7490378091');
+(15, 9, '2023-12-11', 'Kevin Carl Lloren', 'llorenkevincarl@gmail.com', '7490378091'),
+(16, 0, '2024-05-06', 'admin', 'daynalyndaque1234567@gmail.com', '5377563382'),
+(17, 1, '2024-05-06', 'dayna', 'dayna@gmail.com', '9436482626'),
+(18, 1, '2024-05-06', 'dayna', 'dayna@gmail.com', '8689349331'),
+(19, 11, '2024-05-06', 'jancholoe', 'jancholoe@gmail.com', '1163270466'),
+(20, 11, '2024-05-06', 'jancholoe', 'jancholoe@gmail.com', '5030122945'),
+(21, 11, '2024-05-06', 'jancholoe', 'jancholoe@gmail.com', '9785155632'),
+(22, 11, '2024-05-06', 'jancholoe', 'jancholoe@gmail.com', '0572534247'),
+(23, 11, '2024-05-06', 'choloe', 'choloe@gmail.com', '2689770173'),
+(24, 10, '2024-05-06', 'jancholoe tesorero', 'jancholoetesorero@gmail.com', '2302984523'),
+(25, 10, '2024-05-06', 'jancholoe tesorero', 'jancholoetesorero@gmail.com', '9988510144'),
+(26, 10, '2024-05-07', 'jancholoe tesorero', 'jancholoetesorero@gmail.com', '7023355084'),
+(27, 10, '2024-05-07', 'jancholoe tesorero', 'jancholoetesorero@gmail.com', '5806348269'),
+(28, 10, '2024-05-07', 'jancholoe tesorero', 'daynalyndaque1234567@gmail.com', '7009554382');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer_signup`
+--
+
+CREATE TABLE `customer_signup` (
+  `signup_id` int(11) NOT NULL,
+  `name` varchar(250) NOT NULL,
+  `username` varchar(250) NOT NULL,
+  `password` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login_customer`
+--
+
+CREATE TABLE `login_customer` (
+  `user_id` int(11) NOT NULL,
+  `fullname` varchar(250) NOT NULL,
+  `username` varchar(250) NOT NULL,
+  `password` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -181,12 +220,12 @@ CREATE TABLE `sales` (
 --
 
 INSERT INTO `sales` (`sales_ID`, `price_ID`, `vipSeatS`, `lower_boxSeatS`, `upper_boxSeatS`, `gen_addSeatS`) VALUES
-(1, 1, 199, 199, 198, 198),
+(1, 1, 199, 199, 198, 196),
 (2, 2, 300, 299, 298, 297),
 (4, 4, 198, 197, 196, 197),
 (9, 9, 248, 250, 250, 250),
-(10, 10, 300, 300, 300, 300),
-(11, 11, 200, 200, 200, 200);
+(10, 10, 299, 299, 299, 298),
+(11, 11, 199, 199, 199, 198);
 
 -- --------------------------------------------------------
 
@@ -223,7 +262,20 @@ INSERT INTO `transaction` (`Transaction_ID`, `concert_ID`, `date_purchased`, `to
 (12, 2, '2023-12-10', 2, 6000, 0, 0, 0, 2),
 (13, 4, '2023-12-10', 2, 7000, 0, 1, 1, 0),
 (14, 9, '2023-12-11', 1, 3500, 1, 0, 0, 0),
-(15, 9, '2023-12-11', 1, 3500, 1, 0, 0, 0);
+(15, 9, '2023-12-11', 1, 3500, 1, 0, 0, 0),
+(16, 0, '2024-05-06', 0, 0, 0, 0, 0, 0),
+(17, 1, '2024-05-06', 1, 1500, 0, 0, 0, 1),
+(18, 1, '2024-05-06', 1, 1500, 0, 0, 0, 1),
+(19, 11, '2024-05-06', 1, 3000, 0, 0, 0, 1),
+(20, 11, '2024-05-06', 1, 4000, 0, 0, 1, 0),
+(21, 11, '2024-05-06', 1, 3000, 0, 0, 0, 1),
+(22, 11, '2024-05-06', 1, 6000, 1, 0, 0, 0),
+(23, 11, '2024-05-06', 1, 5000, 0, 1, 0, 0),
+(24, 10, '2024-05-06', 1, 1000, 0, 0, 0, 1),
+(25, 10, '2024-05-06', 1, 4000, 1, 0, 0, 0),
+(26, 10, '2024-05-07', 1, 3000, 0, 1, 0, 0),
+(27, 10, '2024-05-07', 1, 2000, 0, 0, 1, 0),
+(28, 10, '2024-05-07', 1, 1000, 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -243,9 +295,22 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_ID`, `fullname`, `username`, `password`) VALUES
-(1, 'Kevin Carl Lloren', 'Kevins', '123'),
-(2, 'Rose Banaybanay', 'admin', 'admin123'),
-(3, 'Krishan Aea Dela Cruz', 'aea', 'a123');
+(9, 'Daynalyn Daque', 'Dayna', ' $2y$10$Is0cU2jrbqOyT6M7AGvgKe1ZTyAcBaI.yFlkTcJggTFdNZy5BGnzK'),
+(10, 'Admin', 'admin', '$ $2y$10$B6aixGOLWTxDWoyl0421G.sYYaEOG1kgq5J4Ej470/VCbSScxDCga');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `Id` int(11) NOT NULL,
+  `Username` varchar(200) DEFAULT NULL,
+  `Email` varchar(200) DEFAULT NULL,
+  `Age` int(11) DEFAULT NULL,
+  `Password` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -276,6 +341,18 @@ ALTER TABLE `customer`
   ADD PRIMARY KEY (`customer_ID`);
 
 --
+-- Indexes for table `customer_signup`
+--
+ALTER TABLE `customer_signup`
+  ADD PRIMARY KEY (`signup_id`);
+
+--
+-- Indexes for table `login_customer`
+--
+ALTER TABLE `login_customer`
+  ADD PRIMARY KEY (`user_id`);
+
+--
 -- Indexes for table `message`
 --
 ALTER TABLE `message`
@@ -298,6 +375,12 @@ ALTER TABLE `transaction`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`user_ID`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`Id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -325,7 +408,19 @@ ALTER TABLE `concert_price`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_ID` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `customer_ID` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `customer_signup`
+--
+ALTER TABLE `customer_signup`
+  MODIFY `signup_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `login_customer`
+--
+ALTER TABLE `login_customer`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `message`
@@ -343,13 +438,19 @@ ALTER TABLE `sales`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `Transaction_ID` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `Transaction_ID` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_ID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `user_ID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
