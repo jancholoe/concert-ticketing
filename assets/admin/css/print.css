@@ -1,0 +1,6 @@
+/* print.css */
+@media print {
+    .sidebar, .header-wrapper, #print, .print-hide {
+        display: none;
+    }
+}

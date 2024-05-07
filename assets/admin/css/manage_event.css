@@ -1,0 +1,279 @@
+*{
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    box-sizing: border-box;
+}
+body{
+    display: flex;
+}
+.sidebar{
+    position: sticky;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 110px;/*kalapad*/
+    height: 100vh;
+    padding: 0 1.5rem;
+    color: #fff;
+    overflow: hidden;
+    transition: all 0.5s linear;
+    background: #15172b;
+}
+.sidebar:hover{
+    width: 230px;
+    transition: 0.5s;
+}
+/*.logo{
+    height: 80px;
+    padding: 16px;
+}  */
+.menu{
+    height: 88%;
+    position: relative;
+    list-style: none;
+    padding: 0;
+}
+.menu li{
+    padding: 1rem;
+    margin: 8px 0;
+    border-radius: 8px;
+    transition: all 0.5s ease-in-out;
+}
+
+.menu li:hover, .active{
+    background: #e0e0e058;
+}
+.logo{
+    margin: 15px 0;
+
+}
+.menu a{
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+.menu a span{
+    overflow: hidden;
+}
+.menu a i {
+    font-size: 1.5rem;/*size sa sidebar text&icon*/
+}
+/*.logout{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+*/
+
+/*topbar*/
+.main-content{
+    position: relative;
+    background: #ebe9eb;
+    width: 100%;
+    padding: 1rem;
+}
+.header-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 2rem;
+    margin-bottom: 1rem;
+    height: 65px;
+}
+.header-title{
+    color: black;
+}
+.search-box{
+    background: rgb(237, 237, 237);
+    border-radius: 15px;
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+}
+.search-box input{
+    background: transparent;
+    padding: 10px;
+}
+.search-box i{
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+}
+.search-box i:hover{
+    transform: scale(1.2);
+}
+
+/*main*/
+.list-wrapper{
+    width: 100%;
+}
+.list {
+    position: relative; /* Added this to make positioning relative */
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    height: 82vh;
+    overflow-y: auto;/*magka scrollbar pag ma sobra ang table*/
+}
+
+.cardHeader{
+    margin-bottom: 40px;
+}
+
+.add-new {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: #4169E1;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.add-new i {
+    margin-right: 5px;
+}
+
+/* Modal styles 
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+*/
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+
+/* Action sa table */
+.action-dropdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-btn {
+    background-color: transparent;
+    color: black;
+    padding: 5px;
+    border: 2px solid black;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 17px;
+}
+
+.action-btn i {
+    margin-left: 3px;
+    font-size: 15px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute; /* Position relative to its normal position */
+    background-color: #15172b;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    margin-top: 100px;
+    margin-left: 35px;
+}
+
+
+.dropdown-content a {
+    color: #fff;
+    padding: 8px 8px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+.dropdown-content a:hover {
+    background-color: #32365f  ;
+}
+
+
+/* Show dropdown when action-btn is clicked*/
+.dropdown-content.show {
+    display: block;
+}
+.fa-sort-down{
+    margin-bottom: 5px;
+}

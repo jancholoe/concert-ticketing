@@ -1,0 +1,189 @@
+*{
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    box-sizing: border-box;
+}
+body{
+    display: flex;
+}
+.sidebar{
+    position: sticky;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 110px;/*kalapad*/
+    height: 100vh;
+    padding: 0 1.5rem;
+    color: #fff;
+    overflow: hidden;
+    transition: all 0.5s linear;
+    background: #15172b;
+}
+.sidebar:hover{
+    width: 230px;
+    transition: 0.5s;
+}
+/*.logo{
+    height: 80px;
+    padding: 16px;
+}  */
+.menu{
+    height: 88%;
+    position: relative;
+    list-style: none;
+    padding: 0;
+}
+.menu li{
+    padding: 1rem;
+    margin: 8px 0;
+    border-radius: 8px;
+    transition: all 0.5s ease-in-out;
+}
+
+.menu li:hover, .active{
+    background: #e0e0e058;
+}
+.logo{
+    margin: 15px 0;
+
+}
+.menu a{
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+.menu a span{
+    overflow: hidden;
+}
+.menu a i {
+    font-size: 1.5rem;/*size sa sidebar text&icon*/
+}
+/*.logout{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+*/
+
+/*topbar*/
+.main-content{
+    position: relative;
+    background: #ebe9eb;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+.header-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 2rem;
+    margin-bottom: 1rem;
+    height: 65px;
+}
+.header-title{
+    color: black;
+}
+.search-box{
+    background: rgb(237, 237, 237);
+    border-radius: 15px;
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+}
+.search-box input{
+    background: transparent;
+    padding: 10px;
+}
+.search-box i{
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+}
+.search-box i:hover{
+    transform: scale(1.2);
+}
+
+.table-1 {
+    width: 100%;
+}
+
+.table-wrapper{
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    height: 82vh;
+    overflow-y: auto;/*magka scrollbar pag ma sobra ang table*/
+}
+
+/* Data range filter & print */
+.form-row {
+    overflow: hidden; /* Clear the float */
+}
+
+.form-group {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+.form-group:last-child {
+    margin-right: 0; /* Remove right margin for the last element */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 295px;
+    height: 35px;
+    font-size: 15px;
+}
+
+.form-group button {
+    width: 80px;
+    height: 35px;
+    margin-right: 5px;
+}
+
+.btn-print{
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+    box-shadow: none;
+}
+
+.btn-filter{
+    color: #fff;
+    background-color: #3F93F1;
+    border-color: #3F93F1;
+    box-shadow: none;
+}
+
+.btn.btn-flat {
+    border-radius: 0;
+    border-width: 1px;
+    box-shadow: none;
+}
+
+input[type="date"] {
+    border: 1px solid black; /* Add this line to set the border */
+    width: 295px;
+    height: 35px;
+    font-size: 15px;
+}
