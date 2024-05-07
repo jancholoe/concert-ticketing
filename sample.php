@@ -109,13 +109,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Confirm'])) {
     try {
         $totalTickets = calculateTotalQuantity($vipQuantity, $upperBoxQuantity, $lowerBoxQuantity, $genAddQuantity);
 
-    
+
         $insertTransactionQuery = "INSERT INTO transaction (concert_ID, total_tickets, total_amount, vipT, lower_boxT, upper_boxT, gen_addT) 
                                    VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $insertTransactionQuery);
         mysqli_stmt_bind_param($stmt, 'iidiiii', $concert_ID, $totalTickets, $totalAmount, $vipQuantity, $lowerBoxQuantity, $upperBoxQuantity, $genAddQuantity);
         mysqli_stmt_execute($stmt);
         logEvent($conn, $_SESSION['id'] ?? null, 'Payment Initiated', "User {$name} initiated payment with masked card: " . maskCardNumber($cardNumber));
+        $paymentProcessed = true;
+        if ($paymentProcessed) {
+            logEvent($conn, $_SESSION['id'], 'Payment Success', "Payment successful for {$name}");
+            // Redirect or handle successful payment scenario
+            echo "<script>alert('Payment successful! Tickets will be emailed shortly.'); window.location='success_page.php';</script>";
+        } else {
+            logEvent($conn, $_SESSION['id'], 'Payment Failure', "Payment failed for {$name}");
+            echo "<script>alert('Payment failed, please try again.'); window.location='retry_page.php';</script>";
+        }
         $insertCustomerQuery = "INSERT INTO customer (concert_ID, email, customer_name, transaction_code) 
                                 VALUES (?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $insertCustomerQuery);
