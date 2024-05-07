@@ -1,17 +1,19 @@
 <?php
 include 'connection.php';
 require_once('tcpdf/tcpdf.php');
-require_once('PHPMailer-master/src/Exception.php');
-require_once('PHPMailer-master/src/PHPMailer.php');
-require_once('PHPMailer-master/src/SMTP.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-function generateTrackingCode($length = 10) {
+function generateTrackingCode($length = 10)
+{
     $characters = '0123456789';
     $trackingCode = '';
     for ($i = 0; $i < $length; $i++) {
@@ -21,11 +23,13 @@ function generateTrackingCode($length = 10) {
     return $trackingCode;
 }
 
-function calculateTotalQuantity($vipQuantity, $upperBoxQuantity, $lowerBoxQuantity, $genAddQuantity) {
+function calculateTotalQuantity($vipQuantity, $upperBoxQuantity, $lowerBoxQuantity, $genAddQuantity)
+{
     return $vipQuantity + $upperBoxQuantity + $lowerBoxQuantity + $genAddQuantity;
 }
 
-function createTicketLayout($pdf, $concertDetails, $seatType) {
+function createTicketLayout($pdf, $concertDetails, $seatType)
+{
     $pdf->SetFont('times', 'B', 12);
     $x = $pdf->GetX();
     $y = $pdf->GetY();
@@ -76,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Confirm'])) {
     $transactionCode = generateTrackingCode();
 
     // Perform database updates
-    
+
 
     // Calculate total quantity
     $totalTickets = calculateTotalQuantity($vipQuantity, $upperBoxQuantity, $lowerBoxQuantity, $genAddQuantity);
@@ -142,38 +146,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Confirm'])) {
     }
 
     // Create a PHPMailer instance
-    $mail = new PHPMailer(true);
 
     try {
-        // Server settings
+        // Server settings 
+        $mail = new PHPMailer(true);
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';  // Specify your SMTP server
         $mail->SMTPAuth   = true;                 // Enable SMTP authentication
         $mail->Username   = 'dps417100@gmail.com'; // SMTP username
-        $mail->Password   = 'caaf camf mxog zgxi'; // SMTP password
-        $mail->SMTPSecure = 'tls';                 // Enable TLS encryption, `ssl` also accepted
-        $mail->Port       = 587;                   // TCP port to connect to
+        $mail->Password   = 'caafcamfmxogzgxi'; // SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
 
         // Sender
         $mail->setFrom('dps417100@gmail.com', 'KRK Tickets');
-
-        // Recipient
         $mail->addAddress($customerEmail, $customerName);
+        $mail->addStringAttachment($pdfContent, 'tickets.pdf', 'base64', 'application/pdf');
 
-        // Attach the PDF
-        $mail->addStringAttachment($pdfContent, 'tickets.pdf');
 
         // Email content
         $mail->isHTML(true);
         $mail->Subject = 'Concert Ticket Purchase';
         $mail->Body    = 'Thank you, ' . $customerName . ', for purchasing tickets! Attached is your concert ticket pdf. Order ID: ' . $transactionCode;
-
+        $mail->addStringAttachment($pdfContent, 'tickets.pdf', 'base64', 'application/pdf');
         // Send the email
         $mail->send();
 
         echo 'Email sent successfully';
-
-        // JavaScript delay for 5 seconds before redirecting
         echo '<script>
             setTimeout(function(){
                 window.location.href = "success.php?name=' . urlencode($customerName) . '";
@@ -182,14 +181,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Confirm'])) {
     } catch (Exception $e) {
         echo "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
-
-    // End output buffering and flush the output
-    ob_end_flush();
-    exit(); // Ensure no further code is executed after redirection
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -198,6 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Confirm'])) {
     <link rel="stylesheet" href="assets/fontawesome-free-5.15.4-web/css/all.min.css">
     <style></style>
 </head>
+
 <body>
     <header>
         <a href="#" class="logo">KRK Tickets</a>
@@ -222,61 +219,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Confirm'])) {
             </div>-->
     </header>
     <div class="content">
-        
-    <div id="Credit Card" class="tabcontent">
-		<h3 style="margin-top: 70px;">Enter your payment details</h3>
-        <form action="payment.php?id=<?php echo $_SESSION['concert_info']['concert_ID']; ?>" method="post" name="confirmationForm">
 
-            <!-- Include other form fields -->
-        <input type="hidden" name="concert_ID" value="<?php echo $_SESSION['concert_info']['concert_ID']; ?>">
-        <input type="hidden" name="totalAmount" value="<?php echo $_POST['totalAmount']; ?>">
-        <input type="hidden" name="vipQuantity" value="<?php echo $_POST['vipQuantity']; ?>">
-        <input type="hidden" name="lowerBoxQuantity" value="<?php echo $_POST['lowerBoxQuantity']; ?>">
-        <input type="hidden" name="upperBoxQuantity" value="<?php echo $_POST['upperBoxQuantity']; ?>">
-        <input type="hidden" name="genAddQuantity" value="<?php echo $_POST['genAddQuantity']; ?>">
+        <div id="Credit Card" class="tabcontent">
+            <h3 style="margin-top: 70px;">Enter your payment details</h3>
+            <form action="payment.php?id=<?php echo $_SESSION['concert_info']['concert_ID']; ?>" method="post" name="confirmationForm">
 
-        <p>Name</p>
-        <input type="text" name="name" placeholder="Name:" required>
+                <!-- Include other form fields -->
+                <input type="hidden" name="concert_ID" value="<?php echo $_SESSION['concert_info']['concert_ID']; ?>">
+                <input type="hidden" name="totalAmount" value="<?php echo $_POST['totalAmount']; ?>">
+                <input type="hidden" name="vipQuantity" value="<?php echo $_POST['vipQuantity']; ?>">
+                <input type="hidden" name="lowerBoxQuantity" value="<?php echo $_POST['lowerBoxQuantity']; ?>">
+                <input type="hidden" name="upperBoxQuantity" value="<?php echo $_POST['upperBoxQuantity']; ?>">
+                <input type="hidden" name="genAddQuantity" value="<?php echo $_POST['genAddQuantity']; ?>">
 
-        <p>Email</p>
-        <input type="email" name="email" placeholder="Email" required>
-        
-		<p>Card Number</p>
-		<input type="text" name="card" id="card" placeholder="Enter Card Number" maxlength="19" required>
+                <p>Name</p>
+                <input type="text" name="name" placeholder="Name:" required>
 
-        <div class="form-group-group">
-        <div class="form-group">
-        <p>Expiration Date</p>
-		<input type="month" name="month" placeholder="Month" required>
-        </div>
-        <div class="form-group">
-		<p>CVV</p>
-		<input type="text" name="cvv" id="cvv" maxlength="3" required>
-        <!--<i class="far fa-credit-card" style="margin: 0;"></i>-->
-        </div>
-        </div>
-        <!--
+                <p>Email</p>
+                <input type="email" name="email" placeholder="Email" required>
+
+                <p>Card Number</p>
+                <input type="text" name="card" id="card" placeholder="Enter Card Number" maxlength="19" required>
+
+                <div class="form-group-group">
+                    <div class="form-group">
+                        <p>Expiration Date</p>
+                        <input type="month" name="month" placeholder="Month" required>
+                    </div>
+                    <div class="form-group">
+                        <p>CVV</p>
+                        <input type="text" name="cvv" id="cvv" maxlength="3" required>
+                        <!--<i class="far fa-credit-card" style="margin: 0;"></i>-->
+                    </div>
+                </div>
+                <!--
 		<p>Card Holder Name</p>
 		<input type="text" name="name" placeholder="Enter Card Holder Name">
         -->
-        <div class="center">
-        <input type="submit" name="Confirm" value="Submit Payment" id="saveButton">
+                <div class="center">
+                    <input type="submit" name="Confirm" value="Submit Payment" id="saveButton">
+                </div>
+            </form>
         </div>
-        </form>
-        </div>
-<script>
-    // Function to format card number as the user types
-document.getElementById('card').addEventListener('input', function (event) {
-    let inputValue = event.target.value.replace(/\s/g, ''); // Remove existing spaces
-    inputValue = inputValue.replace(/(\d{4})(?=\d)/g, '$1 '); // Add space after every 4 digits
-    event.target.value = inputValue;
-});
+        <script>
+            // Function to format card number as the user types
+            document.getElementById('card').addEventListener('input', function(event) {
+                let inputValue = event.target.value.replace(/\s/g, ''); // Remove existing spaces
+                inputValue = inputValue.replace(/(\d{4})(?=\d)/g, '$1 '); // Add space after every 4 digits
+                event.target.value = inputValue;
+            });
 
-// Function to restrict CCV input to 3 digits
-document.getElementById('cvv').addEventListener('input', function (event) {
-    event.target.value = event.target.value.replace(/\D/g, '').slice(0, 3);
-});
-
-</script>
+            // Function to restrict CCV input to 3 digits
+            document.getElementById('cvv').addEventListener('input', function(event) {
+                event.target.value = event.target.value.replace(/\D/g, '').slice(0, 3);
+            });
+        </script>
 </body>
+
 </html>

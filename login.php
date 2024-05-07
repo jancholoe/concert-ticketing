@@ -1,33 +1,60 @@
-<?php 
-include'connection.php';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+<?php
+include 'connection.php';
+function logEvent($conn, $userId, $eventType, $description) {
+    $sql = "INSERT INTO logs (user_id, event_type, description) VALUES (?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "iss", $userId, $eventType, $description);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+}
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $password = $_POST['password'];
+    $inputPassword = $_POST['password']; // User's password input from the form
 
-    $sql = "SELECT * FROM user WHERE username = '$username'  ";
+    $sql = "SELECT * FROM users WHERE Username = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
-    $result = mysqli_query($conn, $sql);
-    
+    if ($row = mysqli_fetch_assoc($result)) {
+        $storedPassword = $row['Password'];
+        $userType = $row['usertype'];
+        $userId = $row['Id'];  
 
-    if(mysqli_num_rows($result) > 0){
-        if(!password_verify($password, $hash)){
-            echo " 'login.php', 'Invalid Password' ";
+        if ($inputPassword === $storedPassword) {
+            if ($userType == 'admin') {
+                $_SESSION['username'] = $username;
+                $_SESSION['usertype'] = $userType;
+                logEvent($conn, $userId, 'Login Success', 'Admin logged in successfully');
+                header('Location: admin.php');
+                exit();
+            } else {
+                logEvent($conn, $userId, 'Login Failure', 'Non-admin tried to access admin');
+                echo "<script>alert('Access Denied: You are not an admin.');</script>";
+            }
+        } else {
+            logEvent($conn, $userId, 'Login Failure', 'Invalid password attempted');
+            echo "<script>alert('Invalid Password');</script>";
         }
-        $row = mysqli_fetch_array($result);
-        header('Location: admin.php');
-    }else{
-        echo"<script> alert('Incorrect Username'); </script>";
+    } else {
+        logEvent($conn, null, 'Login Failure', 'Invalid username attempted');
+        echo "<script>alert('Incorrect Username');</script>";
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="assets/login.css">
 </head>
+
 <body>
     <div class="forms">
         <img src="img/ticketblue.png" alt="">
@@ -41,19 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 
-<!-- 
-    <div class="forms">
-            <h1>Login Page</h1>
-            <div class="form-group">
-                <input type="text" name="username" placeholder="Enter your username:" required> 
-            </div>
-            <div class="form-group">
-                <input type="text" name="username" placeholder="Enter your password:" required> 
-            </div>
-            <div class="form-group">
-				<input type="submit" name="submit" value="Submit">
-			</div>
-        </div>
--->
 </body>
+
 </html>

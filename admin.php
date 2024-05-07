@@ -11,7 +11,7 @@ $resultOrderCount = mysqli_query($conn, $selectOrderCount);
 $orderCount = mysqli_fetch_assoc($resultOrderCount)['order_count'];
 
 
-$selectUserCount = "SELECT COUNT(*) AS user_count FROM user";
+$selectUserCount = "SELECT COUNT(*) AS user_count FROM users WHERE usertype ='user'";
 $resultUserCount = mysqli_query($conn, $selectUserCount);
 $userCount = mysqli_fetch_assoc($resultUserCount)['user_count'];
 

@@ -22,7 +22,7 @@ $sql = "SELECT * FROM concert_details";
             <ul class="navigation">
                 <li><a href="#">HOME</a></li>
                 <li><a href="About.php">CONTACT US</a></li>
-                <li><a href="php/logout.php"><button class="btn">Log Out</button> </a></li>
+                <li><a href="php/logout.php">LOGOUT</a></li>
             </ul>
             <div class="search">
                 <span class="icon">

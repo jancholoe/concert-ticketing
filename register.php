@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,76 +8,83 @@
     <link rel="stylesheet" href="style/style.css">
     <title>Register</title>
 </head>
+
 <body>
-      <div class="container">
+    <div class="container">
         <div class="box form-box">
+            <?php
+            include("php/config.php");
+            if (isset($_POST['submit'])) {
+                $firstName = $_POST['firstName'];
+                $lastName = $_POST['lastName'];
+                $username = $_POST['username'];
+                $email = $_POST['email'];
+                $age = $_POST['age'];
+                $password = $_POST['password'];
+                $userType = 'user';
+                // Verifying the unique email
+                $verify_query = mysqli_query($con, "SELECT Email FROM users WHERE Email='$email'");
 
-        <?php 
-         
-         include("php/config.php");
-         if(isset($_POST['submit'])){
-            $username = $_POST['username'];
-            $email = $_POST['email'];
-            $age = $_POST['age'];
-            $password = $_POST['password'];
+                if (mysqli_num_rows($verify_query) != 0) {
+                    echo "<div class='message'>
+                          <p>This email is used, Try another One Please!</p>
+                      </div> <br>";
+                    echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
+                } else {
+                    // Insert data into the database
+                    $query = "INSERT INTO users(FirstName, LastName, Username, Email, Age, Password, UserType) 
+                              VALUES('$firstName', '$lastName', '$username', '$email', '$age', '$password', '$userType')";
+                    mysqli_query($con, $query) or die("Error Occurred");
+                    echo "<div class='message'>
+                          <p>Registration successfully!</p>
+                      </div> <br>";
+                    echo "<a href='index.php'><button class='btn'>Login Now</button>";
+                }
+            } else {
+            ?>
+                <header>Sign Up</header>
+                <form action="" method="post">
+                    <div class="field input">
+                        <label for="firstName">First Name</label>
+                        <input type="text" name="firstName" id="firstName" autocomplete="off" required>
+                    </div>
 
-         //verifying the unique email
+                    <div class="field input">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" name="lastName" id="lastName" autocomplete="off" required>
+                    </div>
 
-         $verify_query = mysqli_query($con,"SELECT Email FROM users WHERE Email='$email'");
+                    <div class="field input">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" autocomplete="off" required>
+                    </div>
 
-         if(mysqli_num_rows($verify_query) !=0 ){
-            echo "<div class='message'>
-                      <p>This email is used, Try another One Please!</p>
-                  </div> <br>";
-            echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
-         }
-         else{
+                    <div class="field input">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" autocomplete="off" required>
+                    </div>
 
-            mysqli_query($con,"INSERT INTO users(Username,Email,Age,Password) VALUES('$username','$email','$age','$password')") or die("Erroe Occured");
+                    <div class="field input">
+                        <label for="age">Age</label>
+                        <input type="number" name="age" id="age" autocomplete="off" required>
+                    </div>
 
-            echo "<div class='message'>
-                      <p>Registration successfully!</p>
-                  </div> <br>";
-            echo "<a href='index.php'><button class='btn'>Login Now</button>";
-         
+                    <div class="field input">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" autocomplete="off" required>
+                    </div>
 
-         }
+                    <div class="field">
+                        <input type="submit" class="btn" name="submit" value="Register">
+                    </div>
 
-         }else{
-         
-        ?>
-
-            <header>Sign Up</header>
-            <form action="" method="post">
-                <div class="field input">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" id="username" autocomplete="off" required>
-                </div>
-
-                <div class="field input">
-                    <label for="email">Email</label>
-                    <input type="text" name="email" id="email" autocomplete="off" required>
-                </div>
-
-                <div class="field input">
-                    <label for="age">Age</label>
-                    <input type="number" name="age" id="age" autocomplete="off" required>
-                </div>
-                <div class="field input">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" autocomplete="off" required>
-                </div>
-
-                <div class="field">
-                    
-                    <input type="submit" class="btn" name="submit" value="Register" required>
-                </div>
-                <div class="links">
-                    Already a member? <a href="index.php">Sign In</a>
-                </div>
-            </form>
+                    <div class="links">
+                        Already a member? <a href="index.php">Sign In</a>
+                    </div>
+                </form>
+            <?php } ?>
         </div>
-        <?php } ?>
-      </div>
+    </div>
 </body>
+
 </html>
