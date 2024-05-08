@@ -146,6 +146,11 @@ option{
                     <span>Message</span>
                 </a>
             </li>
+            <li><a href="logs.php" class="logout">
+                    <i class="fas fa-book"></i>
+                    <span>Logs</span>
+                </a>
+            </li>
             <li><a href="login.php" class="logout">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>

@@ -141,10 +141,15 @@ option{
                     <span>Reports</span>
                 </a>
             </li>
-            <li class="active">
+            <li>
                 <a href="#">
                     <i class="fas fa-envelope"></i>
                     <span>Message</span>
+                </a>
+            </li>
+            <li class="active"><a href="logs.php" class="logout">
+                    <i class="fas fa-book"></i>
+                    <span>Logs</span>
                 </a>
             </li>
             <li><a href="login.php" class="logout">

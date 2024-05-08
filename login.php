@@ -1,6 +1,9 @@
 <?php
 include 'connection.php';
-function logEvent($conn, $userId, $eventType, $description) {
+
+
+function logEvent($conn, $userId, $eventType, $description)
+{
     $sql = "INSERT INTO logs (user_id, event_type, description) VALUES (?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "iss", $userId, $eventType, $description);
@@ -8,10 +11,9 @@ function logEvent($conn, $userId, $eventType, $description) {
     mysqli_stmt_close($stmt);
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $inputPassword = $_POST['password']; // User's password input from the form
+    $inputPassword = $_POST['password'];
 
     $sql = "SELECT * FROM users WHERE Username = ?";
     $stmt = mysqli_prepare($conn, $sql);
@@ -22,10 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     if ($row = mysqli_fetch_assoc($result)) {
         $storedPassword = $row['Password'];
         $userType = $row['usertype'];
-        $userId = $row['Id'];  
+        $userId = $row['Id'];
 
-        if ($inputPassword === $storedPassword) {
+
+        if (password_verify($inputPassword, $storedPassword)) {
             if ($userType == 'admin') {
+                $_SESSION['loggedIn'] = true;
                 $_SESSION['username'] = $username;
                 $_SESSION['usertype'] = $userType;
                 logEvent($conn, $userId, 'Login Success', 'Admin logged in successfully');

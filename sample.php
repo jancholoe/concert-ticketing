@@ -1,5 +1,11 @@
 <?php
 include 'connection.php';
+
+if (!isset($_SESSION['valid'])) {
+    header('Location: index.php');
+    exit;
+}
+
 require_once('tcpdf/tcpdf.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -120,9 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Confirm'])) {
         if ($paymentProcessed) {
             logEvent($conn, $_SESSION['id'], 'Payment Success', "Payment successful for {$name}");
             // Redirect or handle successful payment scenario
-            echo "<script>alert('Payment successful! Tickets will be emailed shortly.'); window.location='success_page.php';</script>";
+            echo "<script>alert('Payment successful! Tickets will be emailed shortly.'); window.location='success.php';</script>";
         } else {
-            logEvent($conn, $_SESSION['id'], 'Payment Failure', "Payment failed for {$name}");
+            logEvent($conn, $_SESSION['id'], 'Payment Failure', "Payment failed for {$customerName}");
             echo "<script>alert('Payment failed, please try again.'); window.location='retry_page.php';</script>";
         }
         $insertCustomerQuery = "INSERT INTO customer (concert_ID, email, customer_name, transaction_code) 
@@ -159,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Confirm'])) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'krkticket@gmail.com'; // Your SMTP username
+        $mail->Username = 'krkticket@gmail.com';
         $mail->Password = 'efzmiwbhnlqfdmrd'; // SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;

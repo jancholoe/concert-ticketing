@@ -4,10 +4,16 @@ include 'connection.php';
 /* retrieve */
 $sql = "SELECT * FROM concert_details";
 
+if (!isset($_SESSION['valid'])) {
+    header('Location: index.php');
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +21,7 @@ $sql = "SELECT * FROM concert_details";
     <link rel="stylesheet" href="assets/customer/css/customer copy.css">
     <link rel="stylesheet" href="assets/fontawesome-free-5.15.4-web/css/all.min.css">
 </head>
+
 <body>
     <header>
         <a href="#" class="logo">DPS Tickets</a>
@@ -65,78 +72,79 @@ $sql = "SELECT * FROM concert_details";
         </div>
     </div>
 
-<!-- JavaScript for search functionality -->
-<script>
-    let searchInput = document.getElementById('searchInput');
-    let moviesContainer = document.getElementById('moviesContainer');
-    let searchBox = document.querySelector('.searchBox');
-    let closeBtn = document.querySelector('.closeBtn');
-    let searchBtn = document.querySelector('.searchBtn');
+    <!-- JavaScript for search functionality -->
+    <script>
+        let searchInput = document.getElementById('searchInput');
+        let moviesContainer = document.getElementById('moviesContainer');
+        let searchBox = document.querySelector('.searchBox');
+        let closeBtn = document.querySelector('.closeBtn');
+        let searchBtn = document.querySelector('.searchBtn');
 
-    // Event listener for search input
-    searchInput.addEventListener('input', function() {
-        filterConcerts(this.value.toLowerCase());
-    });
+        // Event listener for search input
+        searchInput.addEventListener('input', function() {
+            filterConcerts(this.value.toLowerCase());
+        });
 
-    // Event listener for search button
-    searchBtn.onclick = function(){
-        searchBox.classList.add('active');
-        closeBtn.classList.add('active');
-    }
-
-    // Function to filter concerts based on search input
-    function filterConcerts(searchTerm) {
-        let concertBoxes = moviesContainer.getElementsByClassName('movie-box');
-
-        for (let i = 0; i < concertBoxes.length; i++) {
-            let concertBox = concertBoxes[i];
-            let concertName = concertBox.querySelector('h3').innerText.toLowerCase();
-
-            // Check if the concert name contains the search term
-            if (concertName.includes(searchTerm)) {
-                concertBox.style.display = 'block';
-            } else {
-                concertBox.style.display = 'none';
-            }
-        }
-
-        // Show the search box when there are search results
-        if (searchTerm !== '') {
+        // Event listener for search button
+        searchBtn.onclick = function() {
             searchBox.classList.add('active');
             closeBtn.classList.add('active');
-        } else {
+        }
+
+        // Function to filter concerts based on search input
+        function filterConcerts(searchTerm) {
+            let concertBoxes = moviesContainer.getElementsByClassName('movie-box');
+
+            for (let i = 0; i < concertBoxes.length; i++) {
+                let concertBox = concertBoxes[i];
+                let concertName = concertBox.querySelector('h3').innerText.toLowerCase();
+
+                // Check if the concert name contains the search term
+                if (concertName.includes(searchTerm)) {
+                    concertBox.style.display = 'block';
+                } else {
+                    concertBox.style.display = 'none';
+                }
+            }
+
+            // Show the search box when there are search results
+            if (searchTerm !== '') {
+                searchBox.classList.add('active');
+                closeBtn.classList.add('active');
+            } else {
+                searchBox.classList.remove('active');
+                closeBtn.classList.remove('active');
+            }
+
+            // Adjust the layout of visible containers
+            adjustContainerLayout();
+        }
+
+        // Event listener for close button
+        closeBtn.onclick = function() {
             searchBox.classList.remove('active');
             closeBtn.classList.remove('active');
+            // Adjust the layout of visible containers
+            adjustContainerLayout();
         }
 
-        // Adjust the layout of visible containers
-        adjustContainerLayout();
-    }
+        // Function to adjust the layout of visible containers
+        function adjustContainerLayout() {
+            let visibleContainers = moviesContainer.querySelectorAll('.movie-box[style="display: block;"]');
+            let containerCount = visibleContainers.length;
 
-    // Event listener for close button
-    closeBtn.onclick = function(){
-        searchBox.classList.remove('active');
-        closeBtn.classList.remove('active');
-        // Adjust the layout of visible containers
-        adjustContainerLayout();
-    }
+            if (containerCount > 0) {
+                // Calculate the width for each visible container
+                let containerWidth = 100 / containerCount;
 
-    // Function to adjust the layout of visible containers
-    function adjustContainerLayout() {
-        let visibleContainers = moviesContainer.querySelectorAll('.movie-box[style="display: block;"]');
-        let containerCount = visibleContainers.length;
-
-        if (containerCount > 0) {
-            // Calculate the width for each visible container
-            let containerWidth = 100 / containerCount;
-            
-            // Set the width for each visible container
-            for (let i = 0; i < visibleContainers.length; i++) {
-                visibleContainers[i].style.width = containerWidth + '%';
+                // Set the width for each visible container
+                for (let i = 0; i < visibleContainers.length; i++) {
+                    visibleContainers[i].style.width = containerWidth + '%';
+                }
             }
         }
-    }
-</script>
+    </script>
 
 </body>
+
 </html>

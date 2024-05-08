@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (isset($_SESSION['valid'])) {
+    header('Location: customerpage copy.php'); 
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +31,7 @@ session_start();
                 mysqli_stmt_execute($stmt);
                 mysqli_stmt_close($stmt);
             }
+            $allowCaptchaBypass = true;
 
             if (isset($_POST['submit'])) {
                 $recaptchaResponse = $_POST['g-recaptcha-response'];
@@ -46,40 +51,50 @@ session_start();
                 );
 
                 $context = stream_context_create($options);
-                $verify = file_get_contents($url, false, $context);
+                $verify = @file_get_contents($url, false, $context);
+                $captcha_success = $verify ? json_decode($verify) : null;
 
-                if ($verify === FALSE) {
-                    die("Failed to fetch reCAPTCHA response");
-                }
-
-                $captcha_success = json_decode($verify);
-
-                if ($captcha_success->success == false) {
+                if ($captcha_success === null && $allowCaptchaBypass) {
+                    logEvent($con, null, 'Login Notice', 'CAPTCHA service unavailable, bypassing CAPTCHA');
+                    $bypassCaptcha = true;
+                } elseif ($captcha_success && $captcha_success->success == false) {
                     echo "<div class='message'><p>Please confirm that you're not a robot.</p></div><br>";
                     echo "<a href='index.php'><button class='btn'>Go Back</button></a>";
                     logEvent($con, null, 'Login Failed', 'Failed reCAPTCHA verification');
+                    $bypassCaptcha = false;
                 } else {
+                    $bypassCaptcha = true;
+                }
+
+                if ($bypassCaptcha) {
                     $email = mysqli_real_escape_string($con, $_POST['email']);
                     $password = mysqli_real_escape_string($con, $_POST['password']);
-                    $result = mysqli_query($con, "SELECT * FROM users WHERE Email='$email' AND Password='$password'");
-                    if (!$result) {
-                        die("Select Error: " . mysqli_error($con));
-                    }
-                    $row = mysqli_fetch_assoc($result);
+                    $query = "SELECT * FROM users WHERE Email = ?";
+                    $stmt = mysqli_prepare($con, $query);
+                    mysqli_stmt_bind_param($stmt, "s", $email);
+                    mysqli_stmt_execute($stmt);
+                    $result = mysqli_stmt_get_result($stmt);
 
-                    if (is_array($row) && !empty($row)) {
-                        $_SESSION['valid'] = $row['Email'];
-                        $_SESSION['username'] = $row['Username'];
-                        $_SESSION['age'] = $row['Age'];
-                        $_SESSION['id'] = $row['Id'];
-                        logEvent($con, $row['Id'], 'Login Success', 'User logged in successfully');
-                        header("Location: customerpage copy.php");
-                        exit;
+                    if ($row = mysqli_fetch_assoc($result)) {
+                        if (password_verify($password, $row['Password'])) {
+                            $_SESSION['valid'] = $row['Email'];
+                            $_SESSION['username'] = $row['Username'];
+                            $_SESSION['age'] = $row['Age'];
+                            $_SESSION['id'] = $row['Id'];
+                            logEvent($con, $row['Id'], 'Login Success', 'User logged in successfully');
+                            header("Location: customerpage copy.php"); // Ensure this is the correct target page
+                            exit;
+                        } else {
+                            echo "<div class='message'><p>Wrong Username or Password</p></div><br>";
+                            echo "<a href='index.php'><button class='btn'>Go Back</button></a>";
+                            logEvent($con, null, 'Login Failed', 'Incorrect username or password');
+                        }
                     } else {
-                        echo "<div class='message'><p>Wrong Username or Password</p></div><br>";
+                        echo "<div class='message'><p>No user found with that email address.</p></div><br>";
                         echo "<a href='index.php'><button class='btn'>Go Back</button></a>";
-                        logEvent($con, null, 'Login Failed', 'Incorrect username or password');
+                        logEvent($con, null, 'Login Failed', 'No user found with that email');
                     }
+                    mysqli_stmt_close($stmt);
                 }
             } else {
             ?>
@@ -89,7 +104,6 @@ session_start();
                         <label for="email">Email</label>
                         <input type="text" name="email" id="email" autocomplete="off" required>
                     </div>
-
                     <div class="field input">
                         <label for="password">Password</label>
                         <input type="password" name="password" id="password" autocomplete="off" required>
